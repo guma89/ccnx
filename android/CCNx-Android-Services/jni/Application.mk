@@ -14,7 +14,7 @@
 
 # Set APP_PLATFORM override
 # You shouldn't need to change this
-APP_PLATFORM := android-5
+APP_PLATFORM := android-19
 
 # Set APP_ABI
 # You should this if you need other arm or x86 or mips ABIs

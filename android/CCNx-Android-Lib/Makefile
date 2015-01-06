@@ -42,7 +42,7 @@ $(TARGET): $(JARS) environment project.properties default.properties local.prope
 # Guard against a bug in Android SDK r16	
 # You need to have android.library=true for rest of build to work
 local.properties project.properties default.properties:
-	$(ANDROID_SDK)/tools/android update lib-project -p . -t android-7
+	$(ANDROID_SDK)/tools/android update lib-project -p . -t android-19
 	grep -q android.library=true project.properties || echo android.library=true >> project.properties
 
 checkccnjar:

@@ -49,7 +49,7 @@ $(TARGET): $(JARS) local.properties build.xml $(SRC)
 	ant debug
 
 local.properties default.properties project.properties:
-	$(ANDROID_SDK)/tools/android update project --name CCNx-Android-Chat -p . -t android-7 --library ../../CCNx-Android-Lib/
+	$(ANDROID_SDK)/tools/android update project --name CCNx-Android-Chat -p . -t android-19 --library ../../CCNx-Android-Lib/
 
 checkccnjar:
 	@test -f ../../../javasrc/ccn.jar || (echo Missing ccn.jar.  Please make CCNx javasrc before the Android port; \
