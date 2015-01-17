@@ -1,15 +1,13 @@
 package org.ccnx.android.apps.ui;
 
-import org.ccnx.android.ccnlib.R;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-
-public class Plan extends ActionBarActivity {
+public class Plan extends Activity {
     private FieldCleaner fieldCleaner;
 
     @Override

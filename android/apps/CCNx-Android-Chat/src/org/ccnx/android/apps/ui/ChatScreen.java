@@ -15,7 +15,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-package org.ccnx.android.apps.chat;
+package org.ccnx.android.apps.ui;
 
 /**
  * This module is purely UI for chat.  It has an EditText to enter your
@@ -35,6 +35,7 @@ package org.ccnx.android.apps.chat;
  * 
  */
 import org.ccnx.ccn.config.UserConfiguration;
+import org.ccnx.ccnx.CcnxComunicationWorker;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -53,10 +54,12 @@ import android.widget.TextView;
 
 public class ChatScreen extends Activity implements OnKeyListener, ChatCallback {
 	protected final static String TAG="ChatScreen";
+	protected CcnxComunicationWorker worker;
+	protected TextView tv = null;
+	protected ScrollView sv = null;
 
-	// ===========================================================================
-	// Process control Methods
-
+	
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +70,7 @@ public class ChatScreen extends Activity implements OnKeyListener, ChatCallback 
 		etPost.setEnabled(false);
 		etPost.setOnKeyListener(this);
 
-		tv = (TextView) findViewById(R.id.tvOutput);
-		//tv.setMovementMethod(new ScrollingMovementMethod()); 
+		tv = (TextView) findViewById(R.id.tvOutput); 
 		tv.setText("");
 		sv = (ScrollView) findViewById(R.id.svOutput);
 
@@ -80,8 +82,8 @@ public class ChatScreen extends Activity implements OnKeyListener, ChatCallback 
 		String remotehost = i.getStringExtra(CcnxChatMain.PREF_REMOTEHOST);
 		String remoteport = i.getStringExtra(CcnxChatMain.PREF_REMOTEPORT);
 
-		_worker = new ChatWorker(this, this);
-		_worker.start(username, namespace, remotehost, remoteport);
+		worker = new CcnxComunicationWorker(this, this);
+		worker.start(username, namespace, remotehost, remoteport);
 
 		// Do these CCNx operations after we created ChatWorker
 		ScreenOutput("User name = " + UserConfiguration.userName() + "\n");
@@ -107,8 +109,7 @@ public class ChatScreen extends Activity implements OnKeyListener, ChatCallback 
 	@Override
 	public void onDestroy() {
 		Log.i(TAG, "onDestroy()");
-
-		_worker.stop();
+		worker.stop();
 		super.onDestroy();
 	}
 
@@ -134,7 +135,7 @@ public class ChatScreen extends Activity implements OnKeyListener, ChatCallback 
 			return true;
 
 		case SHUTDOWN_MENU:
-			_worker.shutdown();
+			worker.shutdown();
 			finish();
 			return true;
 		}
@@ -162,10 +163,6 @@ public class ChatScreen extends Activity implements OnKeyListener, ChatCallback 
 
 	// ====================================================================
 	// Internal implementation
-
-	protected ChatWorker _worker;
-	protected TextView tv = null;
-	protected ScrollView sv = null;
 
 	/**
 	 * In the UI thread, post a message to the screen
@@ -201,7 +198,7 @@ public class ChatScreen extends Activity implements OnKeyListener, ChatCallback 
 	 * Send a message to the network
 	 */
 	protected void UiToCcn(String s) {
-		_worker.send(s);
+		worker.send(s);
 	}
 
 	/**

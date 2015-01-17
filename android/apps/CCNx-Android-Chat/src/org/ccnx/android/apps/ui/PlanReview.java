@@ -1,10 +1,7 @@
 package org.ccnx.android.apps.ui;
 
-
-import org.ccnx.android.ccnlib.R;
-
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 
-public class PlanReview extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+public class PlanReview extends Activity implements AdapterView.OnItemSelectedListener {
 
     private ArrayAdapter<String> adapter;
     private Spinner spinner;

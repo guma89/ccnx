@@ -1,22 +1,26 @@
 package org.ccnx.android.apps.ui.interfaces.transferObjects;
 
+import java.io.Serializable;
+
 /**
  * Created by Piotrek on 2015-01-14.
  */
-public class SportData {
-    private SportsmanData sportsman;
-    private TrainingPlan plan;
+public class SportData implements Serializable {
+	private final static long serialVersionUID = 1;
 
-    public SportData(SportsmanData sportsman, TrainingPlan plan) {
-        this.sportsman = sportsman;
-        this.plan = plan;
-    }
+	private SportsmanData sportsman;
+	private TrainingPlan plan;
 
-    public SportsmanData getSportsman() {
-        return sportsman;
-    }
+	public SportData(SportsmanData sportsman, TrainingPlan plan) {
+		this.sportsman = sportsman;
+		this.plan = plan;
+	}
 
-    public TrainingPlan getPlan() {
-        return plan;
-    }
+	public SportsmanData getSportsman() {
+		return sportsman;
+	}
+
+	public TrainingPlan getPlan() {
+		return plan;
+	}
 }

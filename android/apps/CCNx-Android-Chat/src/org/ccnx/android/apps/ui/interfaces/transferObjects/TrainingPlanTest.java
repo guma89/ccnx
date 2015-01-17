@@ -12,7 +12,6 @@ public class TrainingPlanTest {
     private static String PLAN_COMMENT = "pretty ok";
     private static int PLAN_RATE = 3;
 
-
     private TrainingPlan cut;
 
     @Before

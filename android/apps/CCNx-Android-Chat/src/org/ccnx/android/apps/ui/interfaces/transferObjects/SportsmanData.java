@@ -1,40 +1,45 @@
 package org.ccnx.android.apps.ui.interfaces.transferObjects;
 
+import java.io.Serializable;
+
 /**
  * Created by Piotrek on 2015-01-14.
  */
-public class SportsmanData {
-    private String name;
-    private String surname;
-    private String weight;
-    private double bmi;
-    private double height;
+public class SportsmanData implements Serializable {
+	private final static long serialVersionUID = 1;
 
-    public SportsmanData(String name, String surname, String weight, double bmi, double height) {
-        this.name = name;
-        this.surname = surname;
-        this.weight = weight;
-        this.bmi = bmi;
-        this.height = height;
-    }
+	private String name;
+	private String surname;
+	private String weight;
+	private double bmi;
+	private double height;
 
-    public String getName() {
-        return name;
-    }
+	public SportsmanData(String name, String surname, String weight,
+			double bmi, double height) {
+		this.name = name;
+		this.surname = surname;
+		this.weight = weight;
+		this.bmi = bmi;
+		this.height = height;
+	}
 
-    public String getSurname() {
-        return surname;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getWeight() {
-        return weight;
-    }
+	public String getSurname() {
+		return surname;
+	}
 
-    public double getBmi() {
-        return bmi;
-    }
+	public String getWeight() {
+		return weight;
+	}
 
-    public double getHeight() {
-        return height;
-    }
+	public double getBmi() {
+		return bmi;
+	}
+
+	public double getHeight() {
+		return height;
+	}
 }

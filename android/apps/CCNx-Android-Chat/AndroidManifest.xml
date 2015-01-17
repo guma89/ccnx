@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="org.ccnx.android.apps.ui.SportsmanAppMain"
+            android:name=".SportsmanAppMain"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.ccnx.android.apps.ui.Profile"
+            android:name=".Profile"
             android:label="@string/title_activity_profil"
             android:parentActivityName="org.ccnx.android.apps.ui.SportsmanAppMain" >
             <meta-data
@@ -26,11 +26,11 @@
                 android:value="org.ccnx.android.apps.ui.SportsmanAppMain" />
         </activity>
         <activity
-            android:name="org.ccnx.android.apps.ui.Plan"
+            android:name=".Plan"
             android:label="@string/title_activity_plan" >
         </activity>
         <activity
-            android:name="org.ccnx.android.apps.ui.PlanReview"
+            android:name=".PlanReview"
             android:label="@string/title_activity_plan_review" >
         </activity>
     </application>
