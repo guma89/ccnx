@@ -33,11 +33,24 @@ GENERATED_SOURCE_FILES =
 JARS = libs/ccn.jar libs/ccnChat.jar
 
 TARGET = $(BIN)/$(APK_NAME)
-SRC = 	./src/org/ccnx/android/apps/chat/CcnxChatMain.java \
-		./src/org/ccnx/android/apps/chat/ChatCallback.java \
-		./src//org/ccnx/android/apps/chat/ChatScreen.java \
-		./src/org/ccnx/android/apps/chat/ChatWorker.java AndroidManifest.xml
-
+SRC = 	./src/org/ccnx/android/apps/ui/SportsmanAppMain.java \
+		./src/org/ccnx/android/apps/ui/CcnxChatMain.java \
+		./src/org/ccnx/android/apps/ui/CcnxUpdateListener.java \
+		./src/org/ccnx/android/apps/ui/ChatCallback.java \
+		./src/org/ccnx/android/apps/ui/ChatScreen.java \
+		./src/org/ccnx/android/apps/ui/FieldCleaner.java \
+		./src/org/ccnx/android/apps/ui/FieldDataProvider.java \
+		./src/org/ccnx/android/apps/ui/Plan.java \
+		./src/org/ccnx/android/apps/ui/PlanReview.java \
+		./src/org/ccnx/android/apps/ui/Profile.java \
+		./src/org/ccnx/android/apps/ui/interfaces/transferObjects/SportData.java \
+		./src/org/ccnx/android/apps/ui/interfaces/transferObjects/SportsmanData.java \
+		./src/org/ccnx/android/apps/ui/interfaces/transferObjects/TrainingPlan.java \
+		./src/org/ccnx/ccnx/Base64Coder.java \
+		./src/org/ccnx/ccnx/CcnxComunicationWorker.java \
+		./src/org/ccnx/ccnx/DataSerializer.java \
+		./src/org/ccnx/ccnx/interfaces/NotificationListener.java AndroidManifest.xml
+		
 default all: $(TARGET) 
 
 with-bcp: clean bcprov default
