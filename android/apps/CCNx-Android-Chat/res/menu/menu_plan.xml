@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="com.interfaces.mkibook.ui.Plan">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.ccnx.android.apps.ui.Plan">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" />
 </menu>

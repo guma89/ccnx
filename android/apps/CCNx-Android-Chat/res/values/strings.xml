@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, CcnxChatMain!</string>
     <string name="app_name">The sportsman</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Ustawienia</string>
     <string name="title_activity_profil">Profil</string>
     <string name="title_activity_plan">Plan</string>
@@ -18,15 +16,14 @@
     <string name="btn_reset">Reset</string>
     <string name="training_rate">Ocena treningu</string>
     <string name="trainingText">Opis treningu</string>
+    <string name="trainingName">Nazwa treningu</string>
     <string name="IP">IP:</string>
     <string name="remotePort">Port:</string>
     <string name="title_activity_plan_review">Plan\'s review</string>
+    <string name="title_user_switch">Wybierz uzytkownika</string>
     <string name="review_tittle">Wybierz trening</string>
     <string name="review_comment">Komentarz</string>
     <string name="review_rank">Oceń</string>
     <string name="review_profile">Profil</string>
-<string name="faceInstructions">
-Use these settings to create a unicast face instead of a multicast face.
-In an emulator, use the assigned IP/hostname, not "localhost".
-</string>
+    <string name="connect">Polacz</string>
 </resources>

@@ -7,6 +7,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name="org.ccnx.android.apps.ui.CcnxApplication"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".SportsmanAppMain"
@@ -24,14 +25,27 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ccnx.android.apps.ui.SportsmanAppMain" />
+            <intent-filter>
+            	<action android:name="com.unitedcoders.android.broadcasttest.SHOWTOAST"></action>
+       		</intent-filter>
         </activity>
         <activity
             android:name=".Plan"
             android:label="@string/title_activity_plan" >
+            <intent-filter>
+            	<action android:name="com.unitedcoders.android.broadcasttest.SHOWTOAST"></action>
+       		</intent-filter>
         </activity>
         <activity
             android:name=".PlanReview"
             android:label="@string/title_activity_plan_review" >
+            <intent-filter>
+            	<action android:name="com.unitedcoders.android.broadcasttest.SHOWTOAST"></action>
+       		</intent-filter>
+        </activity>
+        <activity
+            android:name=".UserSelection"
+            android:label="@string/title_user_switch" >
         </activity>
     </application>
     

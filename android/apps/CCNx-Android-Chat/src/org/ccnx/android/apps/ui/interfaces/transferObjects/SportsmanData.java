@@ -2,25 +2,19 @@ package org.ccnx.android.apps.ui.interfaces.transferObjects;
 
 import java.io.Serializable;
 
-/**
- * Created by Piotrek on 2015-01-14.
- */
 public class SportsmanData implements Serializable {
 	private final static long serialVersionUID = 1;
 
 	private String name;
 	private String surname;
 	private String weight;
-	private double bmi;
-	private double height;
+	private String height;
 
-	public SportsmanData(String name, String surname, String weight,
-			double bmi, double height) {
+	public SportsmanData(String name, String surname, String height, String weight) {
 		this.name = name;
 		this.surname = surname;
-		this.weight = weight;
-		this.bmi = bmi;
 		this.height = height;
+		this.weight = weight;
 	}
 
 	public String getName() {
@@ -35,11 +29,7 @@ public class SportsmanData implements Serializable {
 		return weight;
 	}
 
-	public double getBmi() {
-		return bmi;
-	}
-
-	public double getHeight() {
+	public String getHeight() {
 		return height;
 	}
 }

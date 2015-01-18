@@ -1,8 +1,27 @@
 package org.ccnx.ccnx;
 
-import java.io.IOException;
+/*
+ * CCNx Android Chat
+ *
+ * Copyright (C) 2010 Palo Alto Research Center, Inc.
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 2.1
+ * as published by the Free Software Foundation. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details. You should have received
+ * a copy of the GNU Lesser General Public License along with this library;
+ * if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
+ * Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
-import org.ccnx.android.apps.ui.ChatCallback;
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.ccnx.android.apps.ui.callback.ChatCallback;
+import org.ccnx.android.apps.ui.interfaces.transferObjects.SportData;
 import org.ccnx.android.ccnlib.CCNxConfiguration;
 import org.ccnx.android.ccnlib.CCNxServiceCallback;
 import org.ccnx.android.ccnlib.CCNxServiceControl;
@@ -11,15 +30,16 @@ import org.ccnx.android.ccnlib.CcndWrapper.CCND_OPTIONS;
 import org.ccnx.android.ccnlib.RepoWrapper.REPO_OPTIONS;
 import org.ccnx.ccn.apps.ccnchat.CCNChatNet;
 import org.ccnx.ccn.apps.ccnchat.CCNChatNet.CCNChatCallback;
-import org.ccnx.ccn.config.ConfigurationException;
 import org.ccnx.ccn.profiles.ccnd.CCNDaemonException;
 import org.ccnx.ccn.profiles.ccnd.SimpleFaceControl;
+import org.ccnx.database.SportsmanDatabaseHandler;
+
 import android.content.Context;
 import android.util.Log;
 
-public class CcnxComunicationWorker implements Runnable, CCNxServiceCallback, CCNChatCallback {
-	protected final static String TAG="ChatWorker";
-	protected CCNChatNet _chat;
+public class CcnxComunicationWorker implements Runnable, CCNxServiceCallback,
+		CCNChatCallback {
+	protected CCNChatNet chatNet;
 	protected final ChatCallback chatCallback;
 	protected final Context context;
 	protected CCNxServiceControl ccnxService;
@@ -28,34 +48,38 @@ public class CcnxComunicationWorker implements Runnable, CCNxServiceCallback, CC
 	protected boolean finished = true;
 	protected String remotehost = null;
 	protected String remoteport = "9695";
+	private SportsmanDatabaseHandler db;
 
-	public CcnxComunicationWorker(Context ctx, ChatCallback callback) {
+	public CcnxComunicationWorker(Context ctx, ChatCallback callback,
+			SportsmanDatabaseHandler db) {
 		context = ctx;
 		thd = new Thread(this, "ChatWorker");
 		chatCallback = callback;
 		CCNxConfiguration.config(ctx, false);
+		this.db = db;
 	}
 
-	public synchronized void start(String username, String namespace, String remotehost, String remoteport) {
-		if( false == running ) {
+	public synchronized void start(String username, String namespace,
+			String remotehost, String remoteport) {
+		if (false == running) {
 			try {
 				this.remotehost = remotehost;
 				this.remoteport = remoteport;
-				_chat = new CCNChatNet(this, namespace);
+				chatNet = new CCNChatNet(this, namespace);
 				running = true;
 				finished = false;
 				thd.start();
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
 	public synchronized void stop() {
-		if( !finished ) {
+		if (!finished) {
 			finished = true;
 			try {
-				_chat.shutdown();
+				chatNet.shutdown();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -64,31 +88,56 @@ public class CcnxComunicationWorker implements Runnable, CCNxServiceCallback, CC
 	}
 
 	public synchronized void shutdown() {
-		if( !finished ) {
+		if (!finished) {
 			finished = true;
 			try {
-				_chat.shutdown();
+				chatNet.shutdown();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			try {
 				ccnxService.stopAll();
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
 	public synchronized boolean send(String text) {
-		Log.d(TAG, "send text = " + text);
-
 		try {
-			_chat.sendMessage(text);
-		} catch(Exception e) {
+			SportData data = createObjectToSend();
+			String toSend = DataSerializer.serializeObject(data);
+			chatNet.sendMessage(toSend);
+		} catch (Exception e) {
 			return false;
 		}
-
 		return true;
+	}
+
+	private SportData createObjectToSend() {
+		return new SportData(db.getLatestProfile(), Arrays.asList(db
+				.getLastTraining()));
+	}
+
+	@Override
+	public void recvMessage(String message) {
+		SportData data = unserializeData(message);
+		if (data != null) {
+			db.addProfile(data.getSportsman());
+			db.addTrainings(data.getPlan());
+			chatCallback.recv(message);
+		}
+	}
+
+	private SportData unserializeData(String message) {
+		try {
+			SportData data = (SportData) DataSerializer
+					.unserializeObject(message);
+			return data;
+		} catch (Exception ex) {
+			Log.d("ccnx", "Wrong incomming object");
+		}
+		return null;
 	}
 
 	@Override
@@ -97,29 +146,13 @@ public class CcnxComunicationWorker implements Runnable, CCNxServiceCallback, CC
 	}
 
 	protected void service_run() {
-		// Startup CCNx in a blocking call
-		if( !initializeCCNx() ) {
-			Log.e(TAG, "Could not start CCNx services!");
-		} else {
-			Log.i(TAG,"Starting ccnChatNet.listen() loop");
-			// Now do the Chat event loop
+		if (initializeCCNx()) {
 			try {
-				_chat.listen();
-			} catch (ConfigurationException e) {
-				System.err.println("Configuration exception running ccnChat: "
-						+ e.getMessage());
+				chatNet.listen();
+			} catch (Exception e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				System.err.println("IOException handling chat messages: "
-						+ e.getMessage());
-				e.printStackTrace();
-			} catch(Exception e) {
-				System.err.println("Exception handling chat messages: "
-						+ e.getMessage());
-				e.printStackTrace();	
 			}
 		}
-		Log.i(TAG, "service_run() exits");
 	}
 
 	private boolean initializeCCNx() {
@@ -130,44 +163,37 @@ public class CcnxComunicationWorker implements Runnable, CCNxServiceCallback, CC
 		return ccnxService.startAll();
 	}
 
-	/**
-	 * Called from CCNxServiceControl
-	 */
 	@Override
-	public void newCCNxStatus(SERVICE_STATUS st) {
-		// NOw pass on the status to the app
-		if( null != chatCallback ) {
-			switch(st) {
+	public void newCCNxStatus(SERVICE_STATUS serviceStatus) {
+		if (chatCallback != null) {
+			switch (serviceStatus) {
 			case START_ALL_DONE:
-				try {
-					// If we specified a remote host, use it not multicast
-					if( null != remotehost && remotehost.length() > 0 ) {
-						SimpleFaceControl.getInstance().connectTcp(remotehost, Integer.parseInt(remoteport));
-					} else {
-						SimpleFaceControl.getInstance().openMulicastInterface();
-					}
-					chatCallback.ccnxServices(true);
-				} catch (CCNDaemonException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					chatCallback.ccnxServices(false);
-				}
-
+				connectTcp();
 				break;
 			case START_ALL_ERROR:
 				chatCallback.ccnxServices(false);
 				break;
 			}
-		}	
+		}
 	}
 
-	/**
-	 * called from ccnChatNet when there's a new message.
-	 * Pass it on to the UI.
-	 */
-	@Override
-	public void recvMessage(String message) {
-		Log.d(TAG, "recv text = " + message);
-		chatCallback.recv(message);
+	private void connectTcp() {
+		try {
+			if (checkThatRemoteHostExists()) {
+				SimpleFaceControl.getInstance().connectTcp(remotehost,
+						Integer.parseInt(remoteport));
+			} else {
+				SimpleFaceControl.getInstance().openMulicastInterface();
+			}
+			chatCallback.ccnxServices(true);
+		} catch (CCNDaemonException e) {
+			e.printStackTrace();
+			chatCallback.ccnxServices(false);
+		}
 	}
+
+	private boolean checkThatRemoteHostExists() {
+		return remotehost != null & !remotehost.isEmpty();
+	}
+
 }

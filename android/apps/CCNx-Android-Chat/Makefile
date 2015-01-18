@@ -34,22 +34,23 @@ JARS = libs/ccn.jar libs/ccnChat.jar
 
 TARGET = $(BIN)/$(APK_NAME)
 SRC = 	./src/org/ccnx/android/apps/ui/SportsmanAppMain.java \
-		./src/org/ccnx/android/apps/ui/CcnxChatMain.java \
-		./src/org/ccnx/android/apps/ui/CcnxUpdateListener.java \
-		./src/org/ccnx/android/apps/ui/ChatCallback.java \
-		./src/org/ccnx/android/apps/ui/ChatScreen.java \
-		./src/org/ccnx/android/apps/ui/FieldCleaner.java \
-		./src/org/ccnx/android/apps/ui/FieldDataProvider.java \
-		./src/org/ccnx/android/apps/ui/Plan.java \
-		./src/org/ccnx/android/apps/ui/PlanReview.java \
-		./src/org/ccnx/android/apps/ui/Profile.java \
-		./src/org/ccnx/android/apps/ui/interfaces/transferObjects/SportData.java \
-		./src/org/ccnx/android/apps/ui/interfaces/transferObjects/SportsmanData.java \
-		./src/org/ccnx/android/apps/ui/interfaces/transferObjects/TrainingPlan.java \
-		./src/org/ccnx/ccnx/Base64Coder.java \
-		./src/org/ccnx/ccnx/CcnxComunicationWorker.java \
-		./src/org/ccnx/ccnx/DataSerializer.java \
-		./src/org/ccnx/ccnx/interfaces/NotificationListener.java AndroidManifest.xml
+	./src/org/ccnx/android/apps/ui/UserSelection.java \
+	./src/org/ccnx/android/apps/ui/Plan.java \
+	./src/org/ccnx/android/apps/ui/PlanReview.java \
+	./src/org/ccnx/android/apps/ui/Profile.java \
+	./src/org/ccnx/android/apps/ui/CcnxApplication.java \
+	./src/org/ccnx/android/apps/ui/callback/ChatCallback.java \
+	./src/org/ccnx/android/apps/ui/callback/CallbackGuiUpdater.java \
+	./src/org/ccnx/android/apps/ui/callback/GuiUpdaterWrapper.java \
+	./src/org/ccnx/android/apps/ui/helper/FieldCleaner.java \
+	./src/org/ccnx/android/apps/ui/helper/FieldDataProvider.java \
+	./src/org/ccnx/android/apps/ui/interfaces/transferObjects/SportData.java \
+	./src/org/ccnx/android/apps/ui/interfaces/transferObjects/SportsmanData.java \
+	./src/org/ccnx/android/apps/ui/interfaces/transferObjects/TrainingPlan.java \
+	./src/org/ccnx/ccnx/Base64Coder.java \
+	./src/org/ccnx/ccnx/CcnxComunicationWorker.java \
+	./src/org/ccnx/ccnx/DataSerializer.java \
+	./src/org/ccnx/database/SportsmanDatabaseHandler.java AndroidManifest.xml
 		
 default all: $(TARGET) 
 
@@ -105,3 +106,4 @@ distclean: environment simpleclean
 
 test:
 	@echo "No automated tests for services"
+
